@@ -6,6 +6,22 @@
 <title>Brautkleid-Beratung Mühlacker</title>
 <meta name="description" content="Dein Brautkleid-Termin bei Pretty Woman in Mühlacker: 2 Stunden kostenlose Beratung im eigenen Separee für bis zu 5 Begleitpersonen, über 400 Kleider in Gr. 30 bis 66, ohne Kaufdruck. 4,9 Sterne aus 266 Google-Bewertungen.">
 <meta name="robots" content="noindex">
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied', analytics_storage:'denied', wait_for_update:500});
+window.pwLoadGTM = function(){
+  if (window.pwGTM) return; window.pwGTM = true;
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PLBF7LSN');
+};
+(function(){
+  var c = null; try { c = localStorage.getItem('pw_consent'); } catch(e) {}
+  if (c === 'all') {
+    gtag('consent', 'update', {ad_storage:'granted', ad_user_data:'granted', ad_personalization:'granted', analytics_storage:'granted'});
+    window.pwLoadGTM();
+  }
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Jost:wght@300..600&display=swap" rel="stylesheet">
@@ -212,6 +228,16 @@ details .ans p+p{margin-top:.8em}
 footer{padding:28px 0 120px;font-size:.85rem;color:var(--ink-soft)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
 footer nav{display:flex;gap:20px}
+
+/* Consent */
+.consent{position:fixed;z-index:40;left:16px;right:16px;bottom:16px;max-width:520px;margin-inline:auto;background:var(--paper);color:var(--ink);padding:22px 22px 20px;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 24px 60px -24px rgba(31,26,23,.45);font-size:.95rem;line-height:1.5}
+.consent[hidden]{display:none}
+.consent h2{font-size:1.35rem;margin-bottom:8px}
+.consent p{color:var(--ink-soft);margin-bottom:16px}
+.consent-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.consent-actions .btn{min-height:48px;padding:0 1rem;font-size:.95rem}
+.linkish{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;text-underline-offset:.2em;cursor:pointer}
+@media (max-width:420px){.consent-actions{grid-template-columns:1fr}}
 
 /* Mobile CTA */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:20;display:none;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid var(--line);box-shadow:0 -10px 30px -18px rgba(31,26,23,.35);transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
@@ -488,9 +514,18 @@ footer nav{display:flex;gap:20px}
 <footer>
   <div class="wrap">
     <span>© Pretty Woman Wedding Styles, Mühlacker</span>
-    <nav><a href="https://www.prettywoman-brautmoden.de/impressum/">Impressum</a><a href="https://www.prettywoman-brautmoden.de/datenschutz/">Datenschutz</a></nav>
+    <nav><a href="https://www.prettywoman-brautmoden.de/impressum/">Impressum</a><a href="https://www.prettywoman-brautmoden.de/datenschutz/">Datenschutz</a><button class="linkish" type="button" id="consent-open">Cookie-Einstellungen</button></nav>
   </div>
 </footer>
+
+<div class="consent" id="consent" role="dialog" aria-labelledby="consent-h" aria-describedby="consent-p" hidden>
+  <h2 id="consent-h">Kurz zu Cookies</h2>
+  <p id="consent-p">Wir möchten messen, wie du auf unsere Seite gekommen bist und ob du einen Termin buchst. Dafür nutzen wir Google Tag Manager, Google Analytics, Google Ads und den Meta Pixel. Mehr dazu in der <a href="https://www.prettywoman-brautmoden.de/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>
+  <div class="consent-actions">
+    <button class="btn btn-line" type="button" data-consent="essential">Nur notwendige</button>
+    <button class="btn btn-gold" type="button" data-consent="all">Alle akzeptieren</button>
+  </div>
+</div>
 
 <div class="dock" id="dock">
   <a class="btn btn-gold" href="#termin" data-cta="dock"><svg aria-hidden="true"><use href="#cal"/></svg>Termin wählen</a>
@@ -516,6 +551,37 @@ footer nav{display:flex;gap:20px}
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(es){ heroOut = !es[0].isIntersecting; upd(); },{threshold:0}).observe(hero.querySelector('.cta-row'));
     new IntersectionObserver(function(es){ bookIn = es[0].isIntersecting; upd(); },{threshold:0}).observe(book.querySelector('.book-frame'));
+  }
+
+  // Consent banner
+  var cb = document.getElementById('consent'), stored = null;
+  try { stored = localStorage.getItem('pw_consent'); } catch(e) {}
+  if (!stored) cb.hidden = false;
+  cb.addEventListener('click', function(e){
+    var b = e.target.closest('[data-consent]'); if(!b) return;
+    var v = b.getAttribute('data-consent');
+    try { localStorage.setItem('pw_consent', v); } catch(err) {}
+    if (v === 'all') {
+      gtag('consent', 'update', {ad_storage:'granted', ad_user_data:'granted', ad_personalization:'granted', analytics_storage:'granted'});
+      window.pwLoadGTM();
+    } else {
+      gtag('consent', 'update', {ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied', analytics_storage:'denied'});
+    }
+    dataLayer.push({event:'consent_choice', consent:v});
+    cb.hidden = true;
+  });
+  document.getElementById('consent-open').addEventListener('click', function(){ cb.hidden = false; });
+
+  // Tracking events for GTM
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('[data-cta]'); if(!a) return;
+    dataLayer.push({event:'lp_cta_click', cta:a.getAttribute('data-cta')});
+  });
+  var calSeen = false;
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      if(es[0].isIntersecting && !calSeen){ calSeen = true; dataLayer.push({event:'lp_calendar_view'}); }
+    },{threshold:.3}).observe(document.querySelector('.book-frame'));
   }
 
   // Curvy sizes: light up the sizes other shops rarely carry
@@ -569,7 +635,7 @@ footer nav{display:flex;gap:20px}
         : '<b>Entspannt im Plan.</b> Wenn du bis <b>'+fmt(latest)+'</b> dein Kleid findest, bleibt genug Zeit für Lieferung und Anproben.';
     }
   }
-  sel.addEventListener('change', render); render();
+  sel.addEventListener('change', function(){ render(); if(sel.value) dataLayer.push({event:'lp_wedding_month', wedding_month:sel.value}); }); render();
 })();
 </script>
 </body>

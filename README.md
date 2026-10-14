@@ -19,3 +19,9 @@ Entwurf einer conversion-optimierten Termin-Landingpage für Neukundinnen aus Me
 8. Mobil: fester „Termin wählen“-Button
 
 Seite steht auf `noindex`.
+
+## Tracking
+
+- GTM-Container `GTM-PLBF7LSN` (derselbe wie prettywoman-brautmoden.de), lädt erst nach Klick auf „Alle akzeptieren“
+- Google Consent Mode v2: Standard `denied`, Update auf `granted` bei Zustimmung; Auswahl in `localStorage` (`pw_consent`), änderbar über „Cookie-Einstellungen“ im Footer
+- dataLayer-Events: `consent_choice` (consent), `lp_cta_click` (cta), `lp_calendar_view`, `lp_wedding_month` (wedding_month)
