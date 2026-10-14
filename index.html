@@ -647,10 +647,15 @@ footer nav{display:flex;gap:20px}
     var span = Math.max(m, 12), pct = function(x){ return Math.min(100, Math.max(0, x/span*100)); };
     var latest = new Date(now.getFullYear(), now.getMonth()+m-11, 1);
     pNow.style.left = '0%'; pWed.style.left = pct(m)+'%';
-    if(m <= 6){
+    if(m <= 3){
       place(sSearch,0,pct(Math.min(1,m))); place(sDel,0,0); place(sFit,pct(Math.min(1,m)),pct(m));
       verdict.dataset.tone='urgent';
       verdict.innerHTML = '<b>Knapp, aber machbar.</b> Für eine Bestellung wird es eng. Unsere Outlet-Kleider (500–1.500 €) nimmst du direkt mit. Gib beim Buchen kurz Bescheid.';
+    } else if(m <= 6){
+      // 4–6 months: short delivery times or express shipping, plus dresses to take home
+      place(sSearch,0,pct(1)); place(sDel,pct(1),pct(m-1)); place(sFit,pct(m-1),pct(m));
+      verdict.dataset.tone='urgent';
+      verdict.innerHTML = '<b>Knapp, aber das bekommen wir hin!</b> Wir gehen mit dir alle Kleider mit Lieferzeiten unter 3 Monaten durch oder besprechen einen Expressversand. Außerdem haben wir eine tolle Kollektion mit Kleidern direkt zum Mitnehmen.';
     } else if(m <= 11){
       place(sSearch,0,pct(1)); place(sDel,pct(1),pct(m-2)); place(sFit,pct(m-2),pct(m));
       verdict.dataset.tone='urgent';
