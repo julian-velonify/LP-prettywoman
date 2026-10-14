@@ -581,6 +581,18 @@ footer nav{display:flex;gap:20px}
   });
   document.getElementById('consent-open').addEventListener('click', function(){ cb.hidden = false; });
 
+  // Pass fbclid + UTMs to BridalLive: it appends them to the /danke redirect, where PixelYourSite
+  // fires TerminGebucht (pixel + CAPI) and can attribute the booking to the Meta ad click
+  (function(){
+    var f = document.querySelector('.book-frame iframe'); if(!f) return;
+    var q = new URLSearchParams(location.search), add = [];
+    var fbclid = q.get('fbclid');
+    if(!fbclid){ var m = document.cookie.match(/(?:^|; )_fbc=fb\.\d+\.\d+\.([^;]+)/); if(m) fbclid = decodeURIComponent(m[1]); }
+    if(fbclid) add.push('fbclid=' + encodeURIComponent(fbclid));
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){ if(q.get(k)) add.push(k + '=' + encodeURIComponent(q.get(k))); });
+    if(add.length) f.src = f.getAttribute('src') + '&' + add.join('&');
+  })();
+
   // Booking log: records BridalLive iframe messages locally so a test booking can be verified after the redirect
   addEventListener('message', function(e){
     if(!/(^|\.)bridallive\.com$/.test((e.origin||'').replace(/^https?:\/\//,''))) return;
