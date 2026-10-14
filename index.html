@@ -389,7 +389,7 @@ footer nav{display:flex;gap:20px}
     </div>
     <div class="book-main">
       <div class="book-frame">
-        <iframe title="Terminbuchung Pretty Woman (BridalLive)" src="https://app.bridallive.com/forms.html?formType=scheduler&amp;retailerId=157a8471&amp;lang=de" loading="lazy"></iframe>
+        <iframe title="Terminbuchung Pretty Woman (BridalLive)" src="https://app.bridallive.com/forms.html?formType=scheduler&amp;retailerId=157a8471&amp;lang=de&amp;pw_src=lp" loading="lazy"></iframe>
         <div class="frame-hint"><span>Kalender lädt nicht?</span><a href="https://app.bridallive.com/forms.html?formType=scheduler&amp;retailerId=157a8471&amp;lang=de" target="_blank" rel="noopener" data-cta="fallback">Buchungskalender in neuem Fenster öffnen</a></div>
       </div>
       <p class="book-tip">Lieber persönlich? Ruf uns an: <a href="tel:+497041810225"><b>07041 810225</b></a></p>
@@ -580,6 +580,13 @@ footer nav{display:flex;gap:20px}
     cb.hidden = true;
   });
   document.getElementById('consent-open').addEventListener('click', function(){ cb.hidden = false; });
+
+  // Booking log: records BridalLive iframe messages locally so a test booking can be verified after the redirect
+  addEventListener('message', function(e){
+    if(!/(^|\.)bridallive\.com$/.test((e.origin||'').replace(/^https?:\/\//,''))) return;
+    var t = e.data && typeof e.data === 'object' ? e.data.type : null; if(!t) return;
+    try { var log = JSON.parse(localStorage.getItem('pw_bl_log')||'[]'); log.push([new Date().toISOString(), t]); localStorage.setItem('pw_bl_log', JSON.stringify(log.slice(-20))); } catch(err) {}
+  });
 
   // Tracking events for GTM
   document.addEventListener('click', function(e){
