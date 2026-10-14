@@ -24,4 +24,5 @@ Seite steht auf `noindex`.
 
 - GTM-Container `GTM-PLBF7LSN` (derselbe wie prettywoman-brautmoden.de), lädt erst nach Klick auf „Alle akzeptieren“
 - Google Consent Mode v2: Standard `denied`, Update auf `granted` bei Zustimmung; Auswahl in `localStorage` (`pw_consent`), änderbar über „Cookie-Einstellungen“ im Footer
+- Meta-Pixel `350174173102316` (Basiscode + PageView) lädt nach Zustimmung direkt auf der Seite; TerminGebucht kommt aus dem GTM-Tag „Meta - Schedule“, ViewContent beim Sichtbarwerden des Kalenders
 - dataLayer-Events: `consent_choice` (consent), `lp_cta_click` (cta), `lp_calendar_view`, `lp_wedding_month` (wedding_month)

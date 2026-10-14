@@ -14,10 +14,17 @@ window.pwLoadGTM = function(){
   if (window.pwGTM) return; window.pwGTM = true;
   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PLBF7LSN');
 };
+window.pwLoadMeta = function(){
+  if (window.fbq) return;
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '350174173102316');
+  fbq('track', 'PageView');
+};
 (function(){
   var c = null; try { c = localStorage.getItem('pw_consent'); } catch(e) {}
   if (c === 'all') {
     gtag('consent', 'update', {ad_storage:'granted', ad_user_data:'granted', ad_personalization:'granted', analytics_storage:'granted'});
+    window.pwLoadMeta();
     window.pwLoadGTM();
   }
 })();
@@ -404,6 +411,7 @@ footer nav{display:flex;gap:20px}
       <figure class="quote rv"><blockquote>„Kein ‚Aufschwätzen‘ oder unehrliches Überzeugen. Einfach eine herzliche, ehrliche Beratung, die mich zu meinem Traumkleid geführt hat.“</blockquote><figcaption><b>Patrizia A.</b><span class="tag">Kein Druck</span></figcaption></figure>
       <figure class="quote rv"><blockquote>„Schon beim Betreten des Ladens wurde ich herzlich empfangen und habe mich sofort wohlgefühlt. Die Auswahl an Brautkleidern ist einfach traumhaft – für jeden Stil.“</blockquote><figcaption><b>Jana H.</b><span class="tag">Auswahl</span></figcaption></figure>
       <figure class="quote rv"><blockquote>„Ich hab meinen Termin ausgemacht und wurde gleich per WhatsApp informiert, dass mein Termin reserviert ist. Vorab gab es ein total tolles Telefonat mit der lieben Martina.“</blockquote><figcaption><b>Julia B.</b><span class="tag">Vorab-Kontakt</span></figcaption></figure>
+      <figure class="quote rv"><blockquote>„Ich habe mein Brautkleid inklusive Accessoires bei Pretty Woman gekauft und auch mein Verlobter hat dort seinen Anzug gefunden. Wir können es wirklich nur von Herzen weiterempfehlen!“</blockquote><figcaption><b>Karina</b><span class="tag">Alles aus einer Hand</span></figcaption></figure>
       <figure class="quote rv"><blockquote>„Die Beratung hätte ich mir schöner nicht vorstellen können. Es wurde sich Zeit genommen und die Atmosphäre war total magisch.“</blockquote><figcaption><b>Cinzia G.</b><span class="tag">Atmosphäre</span></figcaption></figure>
       <figure class="quote rv"><blockquote>„Ein ganz besonderes Dankeschön geht an Artemis. Sie hat mich mit so viel Herz, Sympathie und Einfühlungsvermögen beraten. Sie ist auf all meine Wünsche eingegangen, hat sich viel Zeit genommen und mir nie das Gefühl gegeben, unter Druck zu stehen.“</blockquote><figcaption><b>Patricia S.</b><span class="tag">Beratung</span></figcaption></figure>
     </div>
@@ -520,7 +528,7 @@ footer nav{display:flex;gap:20px}
 
 <div class="consent" id="consent" role="dialog" aria-labelledby="consent-h" aria-describedby="consent-p" hidden>
   <h2 id="consent-h">Kurz zu Cookies</h2>
-  <p id="consent-p">Wir möchten messen, wie du auf unsere Seite gekommen bist und ob du einen Termin buchst. Dafür nutzen wir Google Tag Manager, Google Analytics, Google Ads und den Meta Pixel. Mehr dazu in der <a href="https://www.prettywoman-brautmoden.de/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>
+  <p id="consent-p">Wir möchten messen, wie du auf unsere Seite gekommen bist und ob du einen Termin buchst. Dafür nutzen wir Google Tag Manager, Google Analytics, Google Ads und das Meta-Pixel. Mehr dazu in der <a href="https://www.prettywoman-brautmoden.de/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>
   <div class="consent-actions">
     <button class="btn btn-line" type="button" data-consent="essential">Nur notwendige</button>
     <button class="btn btn-gold" type="button" data-consent="all">Alle akzeptieren</button>
@@ -563,6 +571,7 @@ footer nav{display:flex;gap:20px}
     try { localStorage.setItem('pw_consent', v); } catch(err) {}
     if (v === 'all') {
       gtag('consent', 'update', {ad_storage:'granted', ad_user_data:'granted', ad_personalization:'granted', analytics_storage:'granted'});
+      window.pwLoadMeta();
       window.pwLoadGTM();
     } else {
       gtag('consent', 'update', {ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied', analytics_storage:'denied'});
@@ -580,7 +589,7 @@ footer nav{display:flex;gap:20px}
   var calSeen = false;
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(es){
-      if(es[0].isIntersecting && !calSeen){ calSeen = true; dataLayer.push({event:'lp_calendar_view'}); }
+      if(es[0].isIntersecting && !calSeen){ calSeen = true; dataLayer.push({event:'lp_calendar_view'}); if(window.fbq) fbq('track','ViewContent',{content_name:'Kalender Brautkleid-Beratung'}); }
     },{threshold:.3}).observe(document.querySelector('.book-frame'));
   }
 
