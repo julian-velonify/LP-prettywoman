@@ -11,11 +11,11 @@ Entwurf einer conversion-optimierten Termin-Landingpage für Neukundinnen aus Me
 
 1. Hero mit 4,9 ★ / 265 Google-Bewertungen und CTA zum Kalender
 2. Ablauf des Termins in 5 Schritten bis zur Glocke
-3. Kalender + „Wann heiratest du?“-Zeitstrahl (Lieferzeit 4–6 Monate)
+3. Kalender + „Wann heiratest du?“-Zeitstrahl (Lieferzeit 6–9 Monate)
 4. Echte Google-Rezensionen
-5. Preisrahmen (Outlet ab 599 €)
+5. Preisrahmen (Outlet 500–1.500 €, Kollektion ab 1.300 €)
 6. Curvy-Block Gr. 30–66
 7. FAQ
 8. Mobil: fester „Termin wählen“-Button
 
-Platzhalter `[X]`, `[Y]`, `[Z]` (Preise) und Parken-Info werden vor dem Livegang ersetzt. Seite steht auf `noindex`.
+Seite steht auf `noindex`.
