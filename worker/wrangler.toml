@@ -1,0 +1,13 @@
+name = "pw-capi"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# Secret (nicht ins Repo): npx wrangler secret put META_CAPI_TOKEN
+# Optional zum Testen: npx wrangler secret put TEST_EVENT_CODE  (Events Manager > Test-Ereignisse)
+
+[vars]
+PIXEL_ID = "350174173102316"
+ALLOWED_ORIGIN = "https://prettywoman-termine.velonify.de"
+
+# Domain nach dem Anlegen der DNS-Zone/Route eintragen, z. B.:
+# routes = [{ pattern = "capi.velonify.de", custom_domain = true }]

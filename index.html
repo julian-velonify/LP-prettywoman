@@ -10,6 +10,26 @@
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('consent', 'default', {ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied', analytics_storage:'denied', wait_for_update:500});
+window.pwCAPI = 'https://pw-capi.velonify.workers.dev/';
+// One event = one shared event_id for browser pixel + Conversions API (Meta dedupes on it). Only after consent.
+window.pwMeta = function(name, custom){
+  var c = null; try { c = localStorage.getItem('pw_consent'); } catch(e) {}
+  if (c !== 'all') return;
+  var id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
+  var cookie = function(n){ var m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)')); return m ? decodeURIComponent(m[1]) : undefined; };
+  var fbc = cookie('_fbc'), fbclid = new URLSearchParams(location.search).get('fbclid');
+  if (!fbc && fbclid) fbc = 'fb.1.' + Date.now() + '.' + fbclid;
+  if (window.fbq) {
+    if (name === 'TerminGebucht') fbq('trackCustom', name, custom || {}, {eventID: id});
+    else fbq('track', name, custom || {}, {eventID: id});
+  }
+  try {
+    fetch(window.pwCAPI, {method:'POST', keepalive:true, headers:{'Content-Type':'text/plain'}, body: JSON.stringify({
+      event_name: name, event_id: id, event_source_url: location.href.split('#')[0],
+      fbp: cookie('_fbp'), fbc: fbc, custom_data: custom || undefined
+    })});
+  } catch(e) {}
+};
 window.pwLoadGTM = function(){
   if (window.pwGTM) return; window.pwGTM = true;
   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PLBF7LSN');
@@ -18,7 +38,7 @@ window.pwLoadMeta = function(){
   if (window.fbq) return;
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '350174173102316');
-  fbq('track', 'PageView');
+  window.pwMeta('PageView');
 };
 (function(){
   var c = null; try { c = localStorage.getItem('pw_consent'); } catch(e) {}
@@ -597,6 +617,7 @@ footer nav{display:flex;gap:20px}
   addEventListener('message', function(e){
     if(!/(^|\.)bridallive\.com$/.test((e.origin||'').replace(/^https?:\/\//,''))) return;
     var t = e.data && typeof e.data === 'object' ? e.data.type : null; if(!t) return;
+    if(t === 'bridallive.event_scheduled' && !window.pwBooked){ window.pwBooked = true; window.pwMeta('TerminGebucht'); }
     try { var log = JSON.parse(localStorage.getItem('pw_bl_log')||'[]'); log.push([new Date().toISOString(), t]); localStorage.setItem('pw_bl_log', JSON.stringify(log.slice(-20))); } catch(err) {}
   });
 
@@ -608,7 +629,7 @@ footer nav{display:flex;gap:20px}
   var calSeen = false;
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(es){
-      if(es[0].isIntersecting && !calSeen){ calSeen = true; dataLayer.push({event:'lp_calendar_view'}); if(window.fbq) fbq('track','ViewContent',{content_name:'Kalender Brautkleid-Beratung'}); }
+      if(es[0].isIntersecting && !calSeen){ calSeen = true; dataLayer.push({event:'lp_calendar_view'}); window.pwMeta('ViewContent',{content_name:'Kalender Brautkleid-Beratung'}); }
     },{threshold:.3}).observe(document.querySelector('.book-frame'));
   }
 
