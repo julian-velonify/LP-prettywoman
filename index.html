@@ -608,8 +608,10 @@ footer nav{display:flex;gap:20px}
     var q = new URLSearchParams(location.search), add = [];
     var fbclid = q.get('fbclid');
     if(!fbclid){ var m = document.cookie.match(/(?:^|; )_fbc=fb\.\d+\.\d+\.([^;]+)/); if(m) fbclid = decodeURIComponent(m[1]); }
-    if(fbclid) add.push('fbclid=' + encodeURIComponent(fbclid));
-    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){ if(q.get(k)) add.push(k + '=' + encodeURIComponent(q.get(k))); });
+    // BridalLive sends decoded values to its server; characters like | make Tomcat answer 400 (form shows 'Fehler'), so keep only safe characters
+    function safe(v){ return encodeURIComponent(String(v).replace(/[^A-Za-z0-9._~-]+/g,'_').slice(0,120)); }
+    if(fbclid) add.push('fbclid=' + safe(fbclid));
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){ if(q.get(k)) add.push(k + '=' + safe(q.get(k))); });
     if(add.length) f.src = f.getAttribute('src') + '&' + add.join('&');
   })();
 
