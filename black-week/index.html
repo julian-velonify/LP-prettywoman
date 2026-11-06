@@ -569,7 +569,7 @@ footer{border-top:1px solid var(--line-gold)}
     <div class="book-main">
       <div class="book-frame" id="kalender">
         <iframe title="Terminbuchung Pretty Woman (BridalLive)" scrolling="no" src="https://app.bridallive.com/forms.html?formType=scheduler&amp;retailerId=157a8471&amp;lang=de&amp;pw_src=bw"></iframe>
-        <div class="frame-hint"><span>Kalender lädt nicht?</span><a href="https://app.bridallive.com/forms.html?formType=scheduler&amp;retailerId=157a8471&amp;lang=de&amp;pw_src=bw" target="_blank" rel="noopener" data-cta="fallback">Buchungskalender in neuem Fenster öffnen</a></div>
+        <div class="frame-hint"><span>Kalender lädt nicht?</span><a href="https://app.bridallive.com/forms.html?formType=scheduler&amp;retailerId=157a8471&amp;lang=de" target="_blank" rel="noopener" data-cta="fallback">Buchungskalender in neuem Fenster öffnen</a></div>
       </div>
       <p class="book-tip">Lieber persönlich? Ruf uns an: <a href="tel:+497041810225"><b>07041 810225</b></a></p>
     </div>
@@ -928,7 +928,7 @@ footer{border-top:1px solid var(--line-gold)}
   var calSeen = false;
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(es){
-      if(es[0].isIntersecting && !calSeen){ calSeen = true; dataLayer.push({event:'lp_calendar_view', lp_variant:V}); window.pwMeta('ViewContent',{content_name:'Kalender Black Week'}); }
+      if(es[0].isIntersecting && !calSeen){ calSeen = true; dataLayer.push({event:'lp_calendar_view', lp_variant:V}); window.pwMeta('ViewContent',{content_name:'Kalender Brautkleid-Beratung'}); }
     },{threshold:.3}).observe(frame);
   }
 
