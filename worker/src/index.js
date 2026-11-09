@@ -43,7 +43,7 @@ export default {
       client_ip_address: request.headers.get('CF-Connecting-IP') || undefined,
       client_user_agent: request.headers.get('User-Agent') || undefined,
       fbp: str(b.fbp, 120),
-      fbc: str(b.fbc, 200),
+      fbc: str(b.fbc, 500),
     };
 
     const payload = {
