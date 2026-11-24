@@ -1,12 +1,16 @@
-// Meta Conversions API relay for prettywoman-termine.velonify.de
+// Meta Conversions API relay for prettywoman-termine.velonify.de and www.prettywoman-brautmoden.de
 // Receives events from the LP (with consent incl. fbp/fbc, without consent cookieless), adds IP + user agent, forwards to Meta.
 
 const EVENTS = new Set(['PageView', 'ViewContent', 'TerminGebucht']);
 const GRAPH = 'https://graph.facebook.com/v21.0';
 
-function cors(env) {
+// ALLOWED_ORIGIN: comma-separated list (LP + main site)
+const origins = (env) => String(env.ALLOWED_ORIGIN).split(',').map(o => o.trim()).filter(Boolean);
+
+function cors(env, origin) {
+  const list = origins(env);
   return {
-    'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN,
+    'Access-Control-Allow-Origin': list.includes(origin) ? origin : list[0],
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Vary': 'Origin',
@@ -17,10 +21,11 @@ const str = (v, max) => (typeof v === 'string' && v.length <= max ? v : undefine
 
 export default {
   async fetch(request, env, ctx) {
-    const h = cors(env);
+    const origin = request.headers.get('Origin') || '';
+    const h = cors(env, origin);
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: h });
     if (request.method !== 'POST') return new Response('Method Not Allowed', { status: 405, headers: h });
-    if (request.headers.get('Origin') !== env.ALLOWED_ORIGIN) return new Response('Forbidden', { status: 403, headers: h });
+    if (!origins(env).includes(origin)) return new Response('Forbidden', { status: 403, headers: h });
 
     let b;
     try { b = JSON.parse(await request.text()); } catch { return new Response('Bad Request', { status: 400, headers: h }); }
@@ -28,7 +33,7 @@ export default {
     const name = str(b.event_name, 40);
     const eventId = str(b.event_id, 80);
     const url = str(b.event_source_url, 500);
-    if (!EVENTS.has(name) || !eventId || !url || !url.startsWith(env.ALLOWED_ORIGIN)) {
+    if (!EVENTS.has(name) || !eventId || !url || !url.startsWith(origin + '/')) {
       return new Response('Bad Request', { status: 400, headers: h });
     }
 
